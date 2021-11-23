@@ -134,7 +134,7 @@ def createCommand(filename, baseBlock='white_concrete'):
             im = im.resize((128, 128))
         pix = im.load()
     except FileNotFoundError:
-        print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        print(os.path.join(app.config['UPLOAD_FOLDER'], filename), os.getcwd())
         return (f'Unable to find {filename}.png')
 
 
@@ -296,7 +296,7 @@ def uploadf():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             global uploaded_image
             uploaded_image = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            print("Successfully uploaded!")
+            print("Successfully uploaded!", os.getcwd())
             return redirect(url_for('uploadf',
                                     filename=filename, name=username).replace("upload?filename=", "scripts/"))
 
