@@ -297,6 +297,7 @@ def uploadf():
             
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             print("Successfully uploaded!", os.getcwd())
+            print(image.read())
             return redirect(url_for('uploadf',
                                     filename=filename, name=username).replace("upload?filename=", "scripts/"))
 
