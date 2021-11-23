@@ -206,12 +206,8 @@ startX = -3392
 startY = 140
 startZ = -1600
 
-# cloudinary API details
-cld_api_key = "363215793689296"
-cld_api_secret = "X9olUPqX8fbKfCxV8Cyc0PoZJh8"
-
 # only allows PNGs, saved to this directory
-UPLOAD_FOLDER = '/Users/avishkumar/Desktop/mma-flask/images'
+UPLOAD_FOLDER = '/tmp'
 ALLOWED_EXTENSIONS = {"png"}
 
 # Flask setup
