@@ -104,8 +104,6 @@ def closestMatch(rgb):
 # takes in the name of a 128x128 PNG file and makes a text file with the commands
 # to generate a map displaying the image
 def createCommand(filename, baseBlock='white_concrete'):
-    
-    global uploaded_image
 
     # deals with invalid base blocks
     if f' {baseBlock}\n' not in data:
@@ -298,8 +296,6 @@ def uploadf():
             filename = secure_filename(file.filename)
             
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            global uploaded_image
-            uploaded_image = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             print("Successfully uploaded!", os.getcwd())
             return redirect(url_for('uploadf',
                                     filename=filename, name=username).replace("upload?filename=", "scripts/"))
