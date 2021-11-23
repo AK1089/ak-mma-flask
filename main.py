@@ -128,7 +128,7 @@ def createCommand(filename, baseBlock='white_concrete'):
 
     # loads RGB data from the image
     
-    im = send_from_directory(filename + ".png")
+    im = send_from_directory(app.config['UPLOAD_FOLDER'], filename)
     
     try:
         im = Image.open(filename + ".png")
