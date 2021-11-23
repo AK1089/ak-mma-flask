@@ -119,11 +119,6 @@ def createCommand(filename, baseBlock='white_concrete'):
     elif '.png' in filename:
         filename = filename.replace('.png', '')
 
-    # start commands to reset the canvas and remove the script
-    command = f'@fast\n@bypass /fill {startX} {startY-1} {startZ} {startX+127} {startY} {startZ+127} {baseBlock}\n@bypass /s r i -3329 120 -1544 Theta_the_end\n'
-    command = command + '@bypass /tellraw {{player}} ["",{"text":"Successfully built map art from ","color":"dark_green"},{"text":"§FILENAMEHERE.png","color":"blue"},{"text":"!","color":"dark_green"}]\n'
-    command = command.replace('§FILENAMEHERE', filename[7:])
-
     # loads RGB data from the image
     try:
         im = Image.open(f"{filename}.png")
@@ -132,6 +127,12 @@ def createCommand(filename, baseBlock='white_concrete'):
         pix = im.load()
     except FileNotFoundError:
         return (f'Unable to find {filename}.png')
+
+
+    # start commands to reset the canvas and remove the script
+    command = f'@fast\n@bypass /fill {startX} {startY-1} {startZ} {startX+127} {startY} {startZ+127} {baseBlock}\n@bypass /s r i -3329 120 -1544 Theta_the_end\n'
+    command = command + '@bypass /tellraw {{player}} ["",{"text":"Successfully built map art from ","color":"dark_green"},{"text":"§FILENAMEHERE.png","color":"blue"},{"text":"!","color":"dark_green"}]\n'
+    command = command.replace('§FILENAMEHERE', filename[7:])
 
 
     # iterates through each pixel of the image in natural order (L-R, T-B)
@@ -230,7 +231,7 @@ def view_image(filename):
 def file(filename, username):
 
     # creates a hastebin script based on the image
-    returnstring = createCommand(f"{UPLOAD_FOLDER}{filename}")
+    returnstring = createCommand(os.path.join(app.config['UPLOAD_FOLDER'], filename)})
 
     # discord webhook data
     data = {}
