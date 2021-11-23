@@ -309,5 +309,4 @@ def uploadf():
     <p>Images must be in PNG format - works best if size is 128x128</p>
     '''
 
-if __name__ == '__main__':
-    app.run(threaded=True, port=5000)
+app.run(threaded=True, port=5000)
