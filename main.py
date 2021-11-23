@@ -6,7 +6,6 @@ from werkzeug.utils import secure_filename
 # various functions
 import requests
 # image uploading API
-import cloudinary.uploader as cu
 # Image sequencing library used to get RGB data from input pictures
 from PIL import Image
 # to post to paste.minr.org
