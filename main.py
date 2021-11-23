@@ -129,7 +129,7 @@ def createCommand(filename, baseBlock='white_concrete'):
     # loads RGB data from the image
     
     try:
-        im = Image.open(f"{filename}.png")
+        im = Image.open(os.path.join(app.config['UPLOAD_FOLDER'], filename) + ".png")
         if im.size != (128, 128):
             im = im.resize((128, 128))
         pix = im.load()
