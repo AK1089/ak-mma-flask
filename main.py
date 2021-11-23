@@ -228,7 +228,7 @@ def allowed_file(filename):
 def view_image(filename):
     print(filename + ".png")
     print(os.getcwd())
-    print(app.config['UPLOAD_FOLDER']
+    print(app.config['UPLOAD_FOLDER'])
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 # generated scripts go here
