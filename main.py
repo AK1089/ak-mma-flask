@@ -128,8 +128,10 @@ def createCommand(filename, baseBlock='white_concrete'):
 
     # loads RGB data from the image
     
+    im = send_from_directory(filename + ".png")
+    
     try:
-        im = Image.open(os.path.join(app.config['UPLOAD_FOLDER'], filename) + ".png")
+        im = Image.open(filename + ".png")
         if im.size != (128, 128):
             im = im.resize((128, 128))
         pix = im.load()
@@ -211,7 +213,7 @@ startY = 140
 startZ = -1600
 
 # only allows PNGs, saved to this directory
-UPLOAD_FOLDER = '/app/tmp/'
+UPLOAD_FOLDER = '/tmp/'
 ALLOWED_EXTENSIONS = {"png"}
 
 # Flask setup
