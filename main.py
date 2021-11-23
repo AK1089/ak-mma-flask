@@ -125,13 +125,15 @@ def createCommand(filename, baseBlock='white_concrete'):
     command = command.replace('§FILENAMEHERE', filename[7:])
 
     # loads RGB data from the image
+    
     try:
         im = Image.open(f"{filename}.png")
         if im.size != (128, 128):
             im = im.resize((128, 128))
         pix = im.load()
     except FileNotFoundError:
-        return (f'Unable to find {filename}.png')
+        im = uploaded_image
+        # return (f'Unable to find {filename}.png')
 
 
     # iterates through each pixel of the image in natural order (L-R, T-B)
@@ -288,7 +290,10 @@ def uploadf():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+            
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            global uploaded_image
+            uploaded_image = file.read()
             return redirect(url_for('uploadf',
                                     filename=filename, name=username).replace("upload?filename=", "scripts/"))
 
