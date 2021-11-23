@@ -134,8 +134,8 @@ def createCommand(filename, baseBlock='white_concrete'):
             im = im.resize((128, 128))
         pix = im.load()
     except FileNotFoundError:
-        im = uploaded_image
-        # return (f'Unable to find {filename}.png')
+        print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        return (f'Unable to find {filename}.png')
 
 
     # iterates through each pixel of the image in natural order (L-R, T-B)
@@ -295,7 +295,7 @@ def uploadf():
             
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             global uploaded_image
-            uploaded_image = file.read()
+            uploaded_image = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             print("Successfully uploaded!")
             return redirect(url_for('uploadf',
                                     filename=filename, name=username).replace("upload?filename=", "scripts/"))
