@@ -129,6 +129,7 @@ def createCommand(filename, baseBlock='white_concrete'):
     # loads RGB data from the image
     try:
         print(filename + ".png")
+        print(os.getcwd())
         im = Image.open(filename + ".png")
         if im.size != (128, 128):
             im = im.resize((128, 128))
@@ -227,6 +228,9 @@ def allowed_file(filename):
 # returns the actual image itself
 @app.route("/view/<filename>")
 def view_image(filename):
+    print(filename + ".png")
+    print(os.getcwd())
+    print(app.config['UPLOAD_FOLDER']
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 # generated scripts go here
