@@ -230,7 +230,7 @@ def view_image(filename):
 def file(filename, username):
 
     # creates a hastebin script based on the image
-    returnstring = createCommand(f"images/{filename}")
+    returnstring = createCommand(f"tmp/{filename}")
 
     # discord webhook data
     data = {}
