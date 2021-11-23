@@ -214,7 +214,7 @@ UPLOAD_FOLDER = '/tmp/'
 ALLOWED_EXTENSIONS = {"png"}
 
 # Flask setup
-app = Flask(__name__, static_url_path='/tmp/')
+app = Flask(__name__, static_url_path='/tmp/', static_folder='/tmp/')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # checks if a file is a .png
