@@ -11,7 +11,7 @@ from PIL import Image
 # to post to paste.minr.org
 import json
 
-WEB_ADDRESS = "https://ak-mma-flask.herokuapp.com/"
+WEB_ADDRESS = "https://ak-mma-flask.herokuapp.com"
 
 # blocks and their respective RGB values on a map
 data = '''127 178 56 grass_block
@@ -294,10 +294,9 @@ def uploadf():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+            filename = "".join([c for c in filename if c == "." or c.isalpha()])
             
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            print("Successfully uploaded!", os.getcwd())
-            print(file.read())
             return redirect(url_for('uploadf',
                                     filename=filename, name=username).replace("upload?filename=", "scripts/"))
 
