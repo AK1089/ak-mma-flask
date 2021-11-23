@@ -211,7 +211,7 @@ startY = 140
 startZ = -1600
 
 # only allows PNGs, saved to this directory
-UPLOAD_FOLDER = '/tmp/'
+UPLOAD_FOLDER = '/app/tmp/'
 ALLOWED_EXTENSIONS = {"png"}
 
 # Flask setup
