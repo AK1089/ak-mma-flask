@@ -4,3 +4,7 @@ This program is designed to make the process of creating custom art for Minr pro
 
 The website is hosted using Heroku, and runs on the Flask web framework for Python.
 If you notice any bugs with the website, or have any feedback or questions, feel free to DM me on Discord or start a pull request here.
+
+Hope you enjoy!
+
+**- AK1089**
