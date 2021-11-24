@@ -290,8 +290,11 @@ def uploadf():
             flash('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
-            filename = "abc" + secure_filename(file.filename)
+            print(file.filename)
+            filename = "".join([c for c in secure_filename(file.filename)
+                               if c.isalpha() or c == "."])
             
+            print(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('uploadf',
                                     filename=filename, name=username).replace("upload?filename=", "scripts/"))
