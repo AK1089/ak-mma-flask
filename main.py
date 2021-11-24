@@ -122,7 +122,7 @@ def createCommand(filename, baseBlock='white_concrete'):
     # start commands to reset the canvas and remove the script
     command = f'@fast\n@bypass /fill {startX} {startY-1} {startZ} {startX+127} {startY} {startZ+127} {baseBlock}\n@bypass /s r i -3329 120 -1544 Theta_the_end\n'
     command = command + '@bypass /tellraw {{player}} ["",{"text":"Successfully built map art from ","color":"dark_green"},{"text":"§FILENAMEHERE.png","color":"blue"},{"text":"!","color":"dark_green"}]\n'
-    command = command.replace('§FILENAMEHERE', filename[7:])
+    command = command.replace('§FILENAMEHERE', filename[5:])
 
     # loads RGB data from the image
     try:
@@ -223,9 +223,6 @@ def allowed_file(filename):
 # returns the actual image itself
 @app.route("/view/<filename>")
 def view_image(filename):
-    print(filename + ".png")
-    print(os.getcwd())
-    print(app.config['UPLOAD_FOLDER'])
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 # generated scripts go here
@@ -237,7 +234,6 @@ def file(filename, username):
 
     # discord webhook data
     data = {}
-    data["username"] = "New Map Script Announcer"
     data["embeds"] = []
 
     # discord webhook embed data
@@ -290,11 +286,9 @@ def uploadf():
             flash('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
-            print(file.filename)
             filename = "".join([c.lower() for c in secure_filename(file.filename)
                                if c.isalpha() or c == "."])
             
-            print(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('uploadf',
                                     filename=filename, name=username).replace("upload?filename=", "scripts/"))
