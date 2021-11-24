@@ -243,7 +243,7 @@ def file(filename, username):
     embed["url"] = f"https://paste.minr.org/{returnstring.split(' ')[-1]}"
 
     # discord webhook URL
-    url = "https://discord.com/api/webhooks/901857252368072774/Da9nsmOAtOsohg8AJacW7gnJyLKaxjU3aL2aGcADegd69TEo_fPjkt3tIygbBVxy92Gx"
+    url = os.environ["WEBHOOK_URL"]
 
     # if map creation was successful
     if "/s i i" in returnstring:
@@ -265,7 +265,7 @@ def file(filename, username):
 <h1>Successfully generated map script of {filename} for {username}</h1>
 <p>Click <a href="https://paste.minr.org/{returnstring.split(" ")[-1]}">here</a> to view your script.</p>
 <p>To import your script, use the command <b>{returnstring}</b></p>
-<p>This command has been automatically forwarded to the admins.</p>
+<p>This command has been automatically forwarded to <a href="https://discord.com/channels/190350281580478466/552163731723780096">#staff-requests</a>.</p>
 <img src="{WEB_ADDRESS}/view/{filename}" alt="{filename}">"""
     return returnstring
 
@@ -304,4 +304,18 @@ def uploadf():
       <input type=text name=username value=Username>
     </form>
     <p>Images must be in PNG format - works best if size is 128x128</p>
+    '''
+
+
+# basic home page
+@app.route("/")
+def homepage():
+    return '''
+    <!doctype html>
+    <title>AK1089's Mapmaking Tool</title>
+    <h1>AK1089's Mapmaking Tool for Minr/h1>
+    <p>Welcome! This is a website I created to make the process of making custom art for Minr maps easier.</p>
+    <p><b>Click <a href="https://ak-mma-flask.herokuapp.com/upload">here</a> to get started uploading your maps.</b></p>
+    <p>Click <a href="https://github.com/AK1089/ak-mma-flask">here</a> to view the source code for this website.</p>
+    <p>If you have any questions, or want to report a bug, feel free to DM me on Discord.</p>
     '''
