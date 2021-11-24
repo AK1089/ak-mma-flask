@@ -131,7 +131,7 @@ def createCommand(filename, baseBlock='white_concrete'):
             im = im.resize((128, 128))
         pix = im.load()
     except FileNotFoundError:
-        return (f'Unable to find {filename}.png - this sometimes occurs when your filename has ')
+        return (f'Unable to find {filename}.png\n\nThis sometimes occurs when your image filename has non-alphanumeric characters in it.')
 
 
     # iterates through each pixel of the image in natural order (L-R, T-B)
@@ -291,7 +291,7 @@ def uploadf():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             print(file.filename)
-            filename = "".join([c for c in secure_filename(file.filename)
+            filename = "".join([c.lower() for c in secure_filename(file.filename)
                                if c.isalpha() or c == "."])
             
             print(filename)
