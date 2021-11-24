@@ -87,7 +87,8 @@ def calculateDistance(rgb1, rgb2):
 def closestMatch(rgb):
 
     # currentClosest stores the best match so far and its squared distance
-    currentClosest = ('null', 90000)
+    currentClosest = ('null', 900000)
+    print(colours)
 
     # for every colour, evaluate its distance function
     for c in colours:
