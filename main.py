@@ -313,7 +313,7 @@ def homepage():
     return '''
     <!doctype html>
     <title>AK1089's Mapmaking Tool</title>
-    <h1>AK1089's Mapmaking Tool for Minr/h1>
+    <h1>AK1089's Mapmaking Tool for Minr</h1>
     <p>Welcome! This is a website I created to make the process of making custom art for Minr maps easier.</p>
     <p><b>Click <a href="https://ak-mma-flask.herokuapp.com/upload">here</a> to get started uploading your maps.</b></p>
     <p>Click <a href="https://github.com/AK1089/ak-mma-flask">here</a> to view the source code for this website.</p>
