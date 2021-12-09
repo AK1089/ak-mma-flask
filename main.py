@@ -119,8 +119,8 @@ def createCommand(filename, baseBlock='white_concrete'):
     elif '.png' in filename:
         filename = filename.replace('.png', '')
 
-    # start commands to reset the canvas and remove the script
-    command = f'@fast\n@bypass /fill {startX} {startY-1} {startZ} {startX+127} {startY} {startZ+127} {baseBlock}\n@bypass /s r i -3329 120 -1544 Theta_the_end\n'
+    # start commands to reset the canvas
+    command = f'@fast\n@bypass /fill {startX} {startY-1} {startZ} {startX+127} {startY} {startZ+127} {baseBlock}\n'
     command = command + '@bypass /tellraw {{player}} ["",{"text":"Successfully built map art from ","color":"dark_green"},{"text":"§FILENAMEHERE.png","color":"blue"},{"text":"!","color":"dark_green"}]\n'
     command = command.replace('§FILENAMEHERE', filename[5:])
 
@@ -229,6 +229,10 @@ def view_image(filename):
 @app.route("/scripts/<filename>&name=<username>")
 def file(filename, username):
 
+    # gets minecraft UUID
+    mc_UUID = requests.get('https://api.mojang.com/users/profiles/minecraft/AK1089').json()['id']
+    mc_UUID = '-'.join((mc_UUID[:8], mc_UUID[8:12], mc_UUID[12:16], mc_UUID[16:20], mc_UUID[20:]))
+
     # creates a hastebin script based on the image
     returnstring = createCommand(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
@@ -239,7 +243,7 @@ def file(filename, username):
     # discord webhook embed data
     embed = {}
     embed["title"] = f"Map Art Request from {username}"
-    embed["description"] = returnstring
+    embed["description"] = f"/func execute akmap::add(\"{returnstring.split(' ')[-1]}\", \"mc_UUID\", \"filename\")"
     embed["url"] = f"https://paste.minr.org/{returnstring.split(' ')[-1]}"
 
     # discord webhook URL
@@ -264,8 +268,7 @@ def file(filename, username):
 <title>Generated Script</title>
 <h1>Successfully generated map script of {filename} for {username}</h1>
 <p>Click <a href="https://paste.minr.org/{returnstring.split(" ")[-1]}">here</a> to view your script.</p>
-<p>To import your script, use the command <b>{returnstring}</b></p>
-<p>This command has been automatically forwarded to <a href="https://discord.com/channels/190350281580478466/552163731723780096">#staff-requests</a>.</p>
+<p>Your map art has been automatically forwarded to <a href="https://discord.com/channels/190350281580478466/552163731723780096">#staff-requests</a>.</p>
 <img src="{WEB_ADDRESS}/view/{filename}" alt="{filename}">"""
     return returnstring
 
