@@ -243,7 +243,7 @@ def file(filename, username):
     # discord webhook embed data
     embed = {}
     embed["title"] = f"Map Art Request from {username}"
-    embed["description"] = f"/func execute akmap::add(\"{returnstring.split(' ')[-1]}\", \"mc_UUID\", \"filename\")"
+    embed["description"] = f"/func execute akmap::add(\"{returnstring.split(' ')[-1]}\", \"{mc_UUID}\", \"{filename}\")"
     embed["url"] = f"https://paste.minr.org/{returnstring.split(' ')[-1]}"
 
     # discord webhook URL
