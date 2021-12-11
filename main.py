@@ -230,7 +230,7 @@ def view_image(filename):
 def file(filename, username):
 
     # gets minecraft UUID
-    mc_UUID = requests.get('https://api.mojang.com/users/profiles/minecraft/AK1089').json()['id']
+    mc_UUID = requests.get('https://api.mojang.com/users/profiles/minecraft/{username}').json()['id']
     mc_UUID = '-'.join((mc_UUID[:8], mc_UUID[8:12], mc_UUID[12:16], mc_UUID[16:20], mc_UUID[20:]))
 
     # creates a hastebin script based on the image
