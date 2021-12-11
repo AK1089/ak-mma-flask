@@ -249,7 +249,7 @@ def file(filename, username, post):
 
     # discord webhook URL
     url = os.environ["WEBHOOK_URL"]
-    disc_ack = "Your map art has been automatically forwarded to <a href="https://discord.com/channels/190350281580478466/552163731723780096">#staff-requests</a>." if post else f"If you're on the test server, paste <b>{msc_function}</b> in chat to generate your command."
+    disc_ack = 'Your map art has been automatically forwarded to <a href="https://discord.com/channels/190350281580478466/552163731723780096">#staff-requests</a>.' if post else f"If you're on the test server, paste <b>{msc_function}</b> in chat to generate your command."
 
     # if map creation was successful
     if "/s i i" in returnstring:
