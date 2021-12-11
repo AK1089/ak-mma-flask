@@ -226,8 +226,8 @@ def view_image(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 # generated scripts go here
-@app.route("/scripts/<filename>&name=<username>")
-def file(filename, username):
+@app.route("/scripts/<filename>&name=<username>&post=<post>")
+def file(filename, username, post):
 
     # gets minecraft UUID
     mc_UUID = requests.get(f'https://api.mojang.com/users/profiles/minecraft/{username}').json()['id']
@@ -235,6 +235,7 @@ def file(filename, username):
 
     # creates a hastebin script based on the image
     returnstring = createCommand(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    msc_function = f"/func execute akmap::add(\"{returnstring.split(' ')[-1]}\", \"{mc_UUID}\", \"{filename}\")"
 
     # discord webhook data
     data = {}
@@ -243,11 +244,12 @@ def file(filename, username):
     # discord webhook embed data
     embed = {}
     embed["title"] = f"Map Art Request from {username}"
-    embed["description"] = f"/func execute akmap::add(\"{returnstring.split(' ')[-1]}\", \"{mc_UUID}\", \"{filename}\")"
+    embed["description"] = msc_function
     embed["url"] = f"https://paste.minr.org/{returnstring.split(' ')[-1]}"
 
     # discord webhook URL
     url = os.environ["WEBHOOK_URL"]
+    disc_ack = "Your map art has been automatically forwarded to <a href="https://discord.com/channels/190350281580478466/552163731723780096">#staff-requests</a>." if post else f"If you're on the test server, paste <b>{msc_function}</b> in chat to generate your command."
 
     # if map creation was successful
     if "/s i i" in returnstring:
@@ -257,18 +259,19 @@ def file(filename, username):
         data["embeds"].append(embed)
 
         # send discord webhook
-        result = requests.post(url, json=data, headers={"Content-Type": "application/json"})
-        try:
-            result.raise_for_status()
-        except requests.exceptions.HTTPError as err:
-            return err
+        if post:
+            result = requests.post(url, json=data, headers={"Content-Type": "application/json"})
+            try:
+                result.raise_for_status()
+            except requests.exceptions.HTTPError as err:
+                return err
 
         # if successful, generate a somewhat detailed page
         returnstring = f"""<!doctype html>
 <title>Generated Script</title>
 <h1>Successfully generated map script of {filename} for {username}</h1>
 <p>Click <a href="https://paste.minr.org/{returnstring.split(" ")[-1]}">here</a> to view your script.</p>
-<p>Your map art has been automatically forwarded to <a href="https://discord.com/channels/190350281580478466/552163731723780096">#staff-requests</a>.</p>
+<p>{disc_ack}</p>
 <img src="{WEB_ADDRESS}/view/{filename}" alt="{filename}">"""
     return returnstring
 
@@ -284,6 +287,8 @@ def uploadf():
         file = request.files['file']
         global username
         username = request.form['username']
+        
+        post_automatically = "true" if request.form.get("Post to #staff_requests?") else "false"
 
         if file.filename == '':
             flash('No selected file')
@@ -294,7 +299,7 @@ def uploadf():
             
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('uploadf',
-                                    filename=filename, name=username).replace("upload?filename=", "scripts/"))
+                                    filename=filename, name=username, post=post_automatically).replace("upload?filename=", "scripts/"))
 
     return '''
     <!doctype html>
@@ -305,6 +310,7 @@ def uploadf():
       <input type=submit value=Upload>
       <br><br>
       <input type=text name=username value=Username>
+      <input type="checkbox" name="Post to #staff_requests?" checked>
     </form>
     <p>Images must be in PNG format - works best if size is 128x128</p>
     '''
