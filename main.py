@@ -5,11 +5,14 @@ from flask import Flask, flash, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 # various functions
 import requests
-# image uploading API
 # Image sequencing library used to get RGB data from input pictures
 from PIL import Image
 # to post to paste.minr.org
 import json
+# to do vector calculations effectively
+import numpy as np
+from scipy.spatial import distance
+
 
 WEB_ADDRESS = "https://ak-mma-flask.herokuapp.com"
 
@@ -68,46 +71,32 @@ data = '''127 178 56 grass_block
 100 100 100 deepslate
 216 175 147 raw_iron_block'''
 
-# a place for the colour data to be stored in a dictionary
-colours = {}
+# a place for the blocks matching each colour to be stored
+colours = []
+rgb = []
 
-# converts the raw text in data to a dictionary with namespaced block IDs as keys
+# converts the raw text in data to a list of blocks and a numpy array of vectors
 for line in data.split('\n'):
     r,g,b, block = line.split(' ')
-    colours[block] = (int(r), int(g), int(b))
+    colours.append(block)
+    rgb.append((int(r), int(g), int(b)))
+    
+rgb = np.array(rgb)
 
 
-# a function which gets the squared distance between two points in 3D space
-# defined by RGB vectors, as a pretty good proxy for colour similarity
-def calculateDistance(rgb1, rgb2):
-    return ((rgb1[0] - rgb2[0]) ** 2 + (rgb1[1] - rgb2[1]) ** 2 + (rgb1[2] - rgb2[2]) ** 2)
-
-
-# for an RGB vector, returns the block ID which most closely matches it
-def closestMatch(rgb):
-
-    # currentClosest stores the best match so far and its squared distance
-    currentClosest = ('null', 900000)
-
-    # for every colour, evaluate its distance function
-    for c in colours:
-        dist = calculateDistance(colours[c],rgb)
-
-        # if it is a better match than the current closest, replace current closest
-        if dist < currentClosest[1]:
-            currentClosest = (c, dist)
-
-    # return final best match having checked all possible colours
-    return currentClosest
+# for a given colour, finds the block ID closest to it (in RGB vector space)
+def closestMatch(px):
+    closest_index = distance.cdist([px], rgb).argmin()
+    return colours[closest_index]
 
 
 # takes in the name of a 128x128 PNG file and makes a text file with the commands
 # to generate a map displaying the image
-def createCommand(filename, baseBlock='white_concrete'):
+def createCommand(filename, baseBlock='glass'):
 
     # deals with invalid base blocks
     if f' {baseBlock}\n' not in data:
-        baseBlock = 'white_concrete'
+        baseBlock = 'glass'
 
     # parsing filename - only PNGs allowed!
     filename = filename.lower()
@@ -143,15 +132,20 @@ def createCommand(filename, baseBlock='white_concrete'):
 
         # each x-ordinate within this region
         for xl in range(128):
+            
+            # handles transparency
+            if pix[xl,zl][3] < 100:
+                cline.append('glass')
+            else:
 
-            # gets the block which most closely matches the pixel's colour
-            try:
-                match = closestMatch(pix[xl,zl][:3])[0]
-            except IndexError:
-                return ('Image too small - your image file must be exactly 128x128 pixels in size,')
+                # gets the block which most closely matches the pixel's colour
+                try:
+                    match = closestMatch(pix[xl,zl][:3])
+                except IndexError:
+                    return ('Image too small - your image file must be exactly 128x128 pixels in size,')
 
-            # add the block to make the colour right to the list
-            cline.append(match)
+                # add the block to make the colour right to the list
+                cline.append(match)
 
         # wrote this a little while ago without commenting it and don't
         # know exactly how it works any more, but it gets the job done
@@ -171,7 +165,7 @@ def createCommand(filename, baseBlock='white_concrete'):
             else:
 
                 # small optimisation: doesn't bother adding superfluous commands
-                # to place down white concrete, as the background exists already
+                # to place down the background block, as the background exists already
                 if lastBlock != baseBlock:
 
                     # /setblock vs /fill
