@@ -4,8 +4,10 @@ gunicorn==20.1.0
 itsdangerous==2.0.1
 Jinja2==3.0.3
 MarkupSafe==2.0.1
+numpy==1.21.5
 Pillow==8.3.2
 requests==2.26.0
+scipy==1.7.3
 urllib3==1.26.7
 Werkzeug==2.0.2
 yarl==1.6.3
