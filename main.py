@@ -122,7 +122,9 @@ def createCommand(filename, baseBlock='glass'):
     except FileNotFoundError:
         return (f'Unable to find {filename}.png\n\nThis sometimes occurs when your image filename has non-alphanumeric characters in it.')
 
-
+    # transparency handling setup
+    transparency = False
+    
     # iterates through each pixel of the image in natural order (L-R, T-B)
     for zl in range(128):
 
@@ -136,6 +138,7 @@ def createCommand(filename, baseBlock='glass'):
             # handles transparency
             if pix[xl,zl][3] < 100:
                 cline.append('glass')
+                transparency = True
             else:
 
                 # gets the block which most closely matches the pixel's colour
@@ -181,7 +184,10 @@ def createCommand(filename, baseBlock='glass'):
 
         # adds the last command of the line
         command = command + clinetext
-
+        
+    if transparency:
+        command = command + '\n@bypass /teleport {{player}} ~128 ~ ~\n@bypass /clone -3392 139 -1600 -3265 139 -1473 -3264 139 -1600\n@bypass /clone -3392 140 -1600 -3265 140 -1473 -3264 140 -1600\n@bypass /item replace entity {{player}} weapon.mainhand with minecraft:filled_map{map:12372}\n@delay 20\n@bypass /teleport {{player}} -3328.5 119.0 -1532.5 180 20"
+    
     # posts to paste.minr.org
     try:
         req = requests.post('https://paste.minr.org/documents', data=command)
