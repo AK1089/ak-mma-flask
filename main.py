@@ -44,10 +44,10 @@ data = '''127 178 56 grass_block
 102 127 51 green_wool
 153 51 51 red_wool
 25 25 25 black_wool
-250 238 77 block_of_gold
-92 219 213 block_of_diamond
+250 238 77 gold_block
+92 219 213 diamond_block
 74 128 255 lapis_block
-0 217 58 block_of_emerald
+0 217 58 emerald_block
 129 86 49 podzol
 112 2 0 netherrack
 209 177 161 white_terracotta
